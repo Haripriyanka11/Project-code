@@ -1,0 +1,35 @@
+if (!require("tidyverse")) install.packages("tidyverse")
+if (!require("textdata")) install.packages("textdata")
+if (!require("stopwords")) install.packages("stopwords")
+
+library(tidyverse)
+library(textdata)
+library(stopwords)
+
+data <- read_excel("C:/WM/rp suggestions.xlsx")
+
+text_data <- data$text
+
+text_data <- gsub("[^[:alnum:]]+\\s*", " ", text_data) 
+
+text_data <- tolower(text_data)
+
+stopwords <- stopwords("English") 
+text_data <- text_data %>%
+  str_split(" ") %>%  
+  sapply(., function(x) x[!x %in% stopwords]) %>% 
+  str_c(collapse = " ")  
+
+sentiment <- get_nrc_sentiment(text_data)
+
+positive_count <- sum(sentiment$positive)
+negative_count <- sum(sentiment$negative)
+
+total_count <- positive_count + negative_count
+
+positive_prop <- round(positive_count / total_count * 100, 2)  
+negative_prop <- round(negative_count / total_count * 100, 2)  
+
+pie(c(positive_count, negative_count),
+  labels = c(paste0("Positive (", positive_prop, "%)"), paste0("Negative (", negative_prop, "%)")),
+  col = c("green", "red"),  main = "Distribution of Positive and Negative Responses")
