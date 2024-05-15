@@ -1,0 +1,1 @@
+This is my final year project file where I used machine learning in RStudio. The topic of the project is "Predicting electric two-wheeler adoption intention using Machine Learning". Here, I've worked on with logistic regression, emotion analysis, text analysis and fine grained sentiment analysis.
